@@ -1,4 +1,4 @@
-use super::challenge2::xor;
+use challenge2::xor;
 use rustc_serialize::hex::FromHex;
 
 fn pad_byte_to_length(byte: u8, length: usize) -> Vec<u8> {
@@ -18,7 +18,14 @@ pub fn calculate_score(input: &str) -> usize {
     score
 }
 
-pub fn find_key(input_str: &str) -> String {
+pub struct KeyGuess {
+    pub key:          String,
+    pub cipher_text:  String,
+    pub plain_text:   String,
+    pub etaoin_score: usize,
+}
+
+pub fn guess_key(input_str: &str) -> KeyGuess {
     // Convert input to bytes
     let input = input_str.from_hex().unwrap();
 
@@ -45,25 +52,25 @@ pub fn find_key(input_str: &str) -> String {
         }
     }
 
-    let key = String::from_utf8(vec![highest_scoring_byte]).unwrap();
-
-    println!("---");
-    println!("key: {} score: {}", key, highest_score);
-    println!("  -> {}", plain_text);
-    println!("---");
-
-    key
+    KeyGuess {
+        key:          String::from_utf8(vec![highest_scoring_byte]).unwrap(),
+        plain_text:   plain_text,
+        cipher_text:  input_str.into(),
+        etaoin_score: highest_score
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use super::find_key;
+    use super::guess_key;
 
     const INPUT: &'static str = "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736";
 
     #[test]
     fn decrypt() {
-        // This fails because the key is wrong. Don't want to give away the secret
-        assert_eq!(find_key(&INPUT), "_");
+        let guess = guess_key(&INPUT);
+
+        assert_eq!(guess.key, "X");
+        assert_eq!(guess.plain_text, "Cooking MC's like a pound of bacon");
     }
 }

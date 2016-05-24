@@ -28,7 +28,7 @@ pub fn xor(l: &Vec<u8>, r: &Vec<u8>) -> Result<Vec<u8>, XorError> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use set1::challenge1::hex_to_bytes;
+    use challenge1::hex_to_bytes;
     use rustc_serialize::hex::ToHex;
 
     const INPUT1: &'static str = "1c0111001f010100061a024b53535009181c";
