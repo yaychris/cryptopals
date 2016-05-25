@@ -14,7 +14,7 @@ impl fmt::Debug for XorError {
     }
 }
 
-pub fn xor(l: &Vec<u8>, r: &Vec<u8>) -> Result<Vec<u8>, XorError> {
+pub fn xor(l: &[u8], r: &[u8]) -> Result<Vec<u8>, XorError> {
     if l.len() != r.len() {
         return Err(DifferentLengths(l.len(), r.len()));
     }
